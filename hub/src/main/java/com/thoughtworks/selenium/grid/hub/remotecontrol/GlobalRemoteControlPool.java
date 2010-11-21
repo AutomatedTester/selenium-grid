@@ -82,7 +82,11 @@ public class GlobalRemoteControlPool implements DynamicRemoteControlPool {
                         "Session '" + sessionId + "' is already asssociated with " + remoteControlsBySessionIds.get(sessionId));
             }
 
-            remoteControlsBySessionIds.put(sessionId, new RemoteControlSession(sessionId, remoteControl));
+            final RemoteControlSession newSession;
+
+            newSession = new RemoteControlSession(sessionId, remoteControl);
+            remoteControl.setSessionId(sessionId);
+            remoteControlsBySessionIds.putIfAbsent(sessionId, newSession);
         }
         if (LOGGER.isDebugEnabled()) {
             logSessionMap();
